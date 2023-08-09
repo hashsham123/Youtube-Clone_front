@@ -14,7 +14,7 @@ const Home = ({ type }) => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const res = await axios.get(`https://youtube-clone-back.onrender.com/video/${type}`);
+        const res = await axios.get(`video/${type}`);
         setVideos(res.data);
       } catch (err) {
         console.error('Error fetching videos:', err);

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import {format} from "timeago.js";
 import { useState,useEffect } from 'react';
 import axios from "axios";
-
+import { useSelector } from 'react-redux';
 const Container = styled.div`
 width: 360px;
 margin-bottom: ${(props)=>props.type === "sm" ? "10px" :"45px"};
@@ -52,18 +52,19 @@ color: ${({theme})=>theme.textSoft};
 
 const Card = ({ type, video }) => {
 
-
   const [channel,setChannel] = useState([]);
+  const {currentUser} = useSelector(state => state.user);
+  
   useEffect(()=>{
     const fetchChannel = async()=>{
 
-      const res =await axios.get(`https://youtube-clone-back.onrender.com/users/find/${video.userId}`);
+      const res =await axios.get(`users/find/${video.userId}`);
       setChannel(res.data);
     }
     fetchChannel();
   },[video.userId]);
   return (
-    <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
+    <Link to={currentUser ? `/video/${video._id}` : '/signin'} style={{ textDecoration: "none" }}>
     <Container type={type}>
       <Image
         type={type}

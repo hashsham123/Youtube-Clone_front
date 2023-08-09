@@ -78,7 +78,7 @@ const SignIn = () => {
   e.preventDefault();
   dispatch(loginStart());
   try{
-     const res = await axios.post("https://youtube-clone-back.onrender.com/auth/signin",{name,password});
+     const res = await axios.post("/auth/signin",{name,password});
      dispatch(loginSuccess(res.data));
      console.log(res.data);
   }catch(err){
@@ -92,7 +92,7 @@ const SignIn = () => {
     dispatch(loginStart());
 
     try {
-      const res = await axios.post("https://youtube-clone-back.onrender.com/auth/signup", { name, email, password });
+      const res = await axios.post("/auth/signup", { name, email, password });
       dispatch(loginSuccess(res.data));
       console.log(res.data);
     } catch (err) {
@@ -103,6 +103,7 @@ const SignIn = () => {
     <Container>
         <Wrapper>
             <Title>
+        
             Sign in
             </Title>
             <Subtitle>

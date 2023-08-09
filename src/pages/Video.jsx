@@ -130,8 +130,8 @@ const Video = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const videoRes = await axios.get(`https://youtube-clone-back.onrender.com/video/find/${path}`);
-        const channelRes = await axios.get(`https://youtube-clone-back.onrender.com/users/find/${videoRes.data.userId}`);
+        const videoRes = await axios.get(`/video/find/${path}`);
+        const channelRes = await axios.get(`/users/find/${videoRes.data.userId}`);
         setChannel(channelRes.data);
         dispatch(fetchSuccess(videoRes.data));
       } catch (err) {
@@ -142,23 +142,32 @@ const Video = () => {
   }, [path, dispatch]);
 
   const handleLike = async () => {
-    await axios.put(`https://youtube-clone-back.onrender.com/users/like/${currentVideo._id}`);
+    await axios.put(`/users/like/${currentVideo._id}`);
     dispatch(like(currentUser._id));
   };
   const handleDislike = async () => {
-    await axios.put(`https://youtube-clone-back.onrender.com/users/dislike/${currentVideo._id}`);
+    await axios.put(`/users/dislike/${currentVideo._id}`);
     dispatch(dislike(currentUser._id));
   };
 
-  const handleSub = async () => {
-    currentUser.subscribedUsers.includes(channel._id)
-      ? await axios.put(`https://youtube-clone-back.onrender.com/users/unsub/${channel._id}`)
-      : await axios.put(`https://youtube-clone-back.onrender.com/users/sub/${channel._id}`);
-    dispatch(subscription(channel._id));
-  };
+ 
+    const handleSub = async () => {
+      if (currentUser?.subscribedUsers) { // Use optional chaining to handle null
+        const channelId = channel._id;
+        if (currentUser.subscribedUsers.includes(channelId)) {
+          await axios.put(`/users/unsub/${channelId}`);
+        } else {
+          await axios.put(`/users/sub/${channelId}`);
+        }
+        dispatch(subscription(channelId));
+      }
+    };
+  
+  
   if (loading || !currentVideo) {
-    return <div>Loading...</div>; // You can display a loading indicator or a message here
+    return <div>Loading...</div>;
   }
+
   return (
     <Container>
       <Content>
